@@ -28,6 +28,8 @@
 #include "sd.h"
 #include "sd_ops.h"
 
+#define SD_INIT_DELAYED 600
+
 static const unsigned int tran_exp[] = {
 	10000,		100000,		1000000,	10000000,
 	0,		0,		0,		0
@@ -1430,6 +1432,9 @@ int mmc_attach_sd(struct mmc_host *host)
 	/*
 	 * Detect and init the card.
 	 */
+	mdelay(SD_INIT_DELAYED);
+	pr_err("%s: delay init for %i ms to enable UHS mode\n", mmc_hostname(host), SD_INIT_DELAYED);
+
 	err = mmc_sd_init_card(host, rocr, NULL);
 	if (err)
 		goto err;
